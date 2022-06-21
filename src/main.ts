@@ -1,6 +1,9 @@
-import { Catch } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
-import { GqlExceptionFilter } from '@nestjs/graphql';
+import { ArgumentsHost, Catch } from '@nestjs/common';
+import {
+  BaseExceptionFilter,
+  HttpAdapterHost,
+  NestFactory,
+} from '@nestjs/core';
 import { AppModule } from './app.module';
 
 export class CustomException extends Error {
@@ -9,18 +12,17 @@ export class CustomException extends Error {
   }
 }
 
-@Catch(CustomException)
-export class CustomExceptionFilter implements GqlExceptionFilter {
-  public catch(): any {
-    console.log('not being called from request scoped exception');
-
-    return new Error('test');
+@Catch()
+export class AllExceptionsFilter extends BaseExceptionFilter {
+  catch(exception: unknown, host: ArgumentsHost) {
+    super.catch(exception, host);
   }
 }
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalFilters(new CustomExceptionFilter());
+  // const { httpAdapter } = app.get(HttpAdapterHost);
+  // app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
   await app.listen(3001);
 }
 bootstrap();
