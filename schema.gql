@@ -1,0 +1,29 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""creator"""
+type Creator {
+  id: ID!
+}
+
+"""country"""
+type Country {
+  id: ID!
+}
+
+"""recipe"""
+type Recipe {
+  id: ID!
+  description: String
+  creator: Creator
+  creator2: Creator
+  country: Country
+  country2: Country
+}
+
+type Query {
+  test: Boolean!
+  test2: Boolean!
+  recipe(id: String!): Recipe!
+}
